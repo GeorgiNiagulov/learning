@@ -2,6 +2,7 @@
 
 namespace LearningBundle\Controller;
 
+use LearningBundle\Entity\Article;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,12 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('home/index.html.twig');
+
+        $articles = $this
+            ->getDoctrine()
+            ->getRepository(Article::class)
+            ->findAll();
+        return $this->render('home/index.html.twig',
+            ['articles' => $articles]);
     }
 }

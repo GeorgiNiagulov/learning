@@ -2,6 +2,7 @@
 
 namespace LearningBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -42,6 +43,40 @@ class User implements UserInterface
      * @ORM\Column(name="fullName", type="string", length=255)
      */
     private $fullName;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="LearningBundle\Entity\Article", mappedBy="author")
+     *
+     * @ORM\JoinColumn(name="authorId", referencedColumnName="id")
+     */
+    private $articles;
+
+    public function __construct()
+    {
+        $this->articles = new ArrayCollection();
+    }
+
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getArticles(): ArrayCollection
+    {
+        return $this->articles;
+    }
+
+    /**
+     * @param Article $article
+     * @return User
+     */
+    public function addArticle(Article $article)
+    {
+        $this->articles[] = $article;
+
+        return $this;
+    }
 
 
     /**

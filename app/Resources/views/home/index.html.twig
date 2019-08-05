@@ -2,6 +2,35 @@
 
 {% block body %}
 
+    <div class="container body-content">
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-6">
+                    <article>
+                        <header>
+                            <h2>{{ article.title }}</h2>
+                        </header>
+
+                        <p>
+                            {{ article.summary }}
+                        </p>
+
+                        <small class="author">
+                            {{ article.author.fullName }}
+                        </small>
+
+                        <footer>
+                            <div class="pull-right">
+                                <a class="btn btn-default btn-xs"
+                                   href="{{ path('article_view', {id:article.id}) }}">Научете повече &raquo;</a>
+                            </div>
+                        </footer>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
     <section class="flexslider">
         <ul class="slides">
             <li style="background-image: url(img/slider_2.jpg)" class="overlay">
