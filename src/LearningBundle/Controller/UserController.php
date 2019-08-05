@@ -2,6 +2,7 @@
 
 namespace LearningBundle\Controller;
 
+use LearningBundle\Entity\Role;
 use LearningBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,6 +27,14 @@ class UserController extends Controller
             $passwordHash =
                 $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPassword());
+
+            $roleRepository =
+                $this
+                ->getDoctrine()
+                ->getRepository(Role::class)
+                ->findOneBy(['name' => 'ROLE_USER']);
+
+            $user->addRole($roleRepository);
 
             $user->setPassword($passwordHash);
 
