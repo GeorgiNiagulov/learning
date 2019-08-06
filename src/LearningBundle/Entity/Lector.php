@@ -2,6 +2,7 @@
 
 namespace LearningBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +36,20 @@ class Lector
      */
     private $imageURL;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="LearningBundle\Entity\Course")
+     * @ORM\JoinTable(name="courses_lectors",
+     *        joinColumns={@ORM\JoinColumn(name="lector_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="course_id", referencedColumnName="id")}
+     *     )
+     */
+    private $courses;
+    public function __construct()
+    {
+        $this->courses = new ArrayCollection();
+    }
 
     /**
      * Get id

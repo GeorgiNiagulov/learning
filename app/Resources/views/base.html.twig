@@ -50,32 +50,37 @@
                         <li><a href="#">Блог</a></li>
                         <li><a href="contact.html">Контакт</a></li>
                         {% if app.user %}
-                        <li>
-                        <a href="{{ path('user_profile') }}" class="navbar-brand">
-                        Моят профил
-                        </a>
-                        </li>
-                        <li>
-                        <a href="{{ path('article_create') }}" class="navbar-brand">
-                        Create Article
-                        </a>
-                        </li>
-                        <li>
-                        <a href="{{ path('security_logout') }}" class="navbar-brand">
-                        Излез
-                        </a>
-                        </li>
+                            <li>
+                                <a href="{{ path('user_profile') }}">
+                                    Моят профил
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('my_posts') }}">
+                                    Моите постове
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('post_create') }}">
+                                    Създай пост
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('security_logout') }}">
+                                    Излез
+                                </a>
+                            </li>
                         {% else %}
                             <li>
                                 <a href="{{ path('user_register') }}">
                                     Регистрирай се
                                 </a>
                             </li>
-                        <li>
-                        <a href="{{ path('security_login') }}">
-                        Влез
-                        </a>
-                        </li>
+                            <li>
+                                <a href="{{ path('security_login') }}">
+                                    Влез
+                                </a>
+                            </li>
                         {% endif %}
                     </ul>
                 </div>

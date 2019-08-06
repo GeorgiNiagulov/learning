@@ -19,7 +19,11 @@
 
                     <footer>
                         <div class="pull-right">
-                            <a class="btn btn-default btn-xs" href="{{ path('blog_index') }}">back &raquo;</a>
+                            {% if app.getUser() and (app.getUser().isAuthor(article) or app.getUser().isAdmin()) %}
+                            <a class="btn btn-success btn-xs" href="{{ path('post_edit', {'id' : article.id}) }}">Промени</a>
+                            <a class="btn btn-danger btn-xs" href="{{ path('post_delete', {'id' : article.id}) }}">Изтрий</a>
+                            {% endif %}
+                            <a class="btn btn-default btn-xs" href="{{ path('blog_index') }}">Върни се &raquo;</a>
                         </div>
                     </footer>
                 </article>

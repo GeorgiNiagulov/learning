@@ -4,6 +4,8 @@ namespace LearningBundle\Controller;
 
 use LearningBundle\Entity\Role;
 use LearningBundle\Entity\User;
+use LearningBundle\Form\UserType;
+use LearningBundle\Service\Users\UserServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,42 +14,41 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends Controller
 {
     /**
-     * @Route("register", name="user_register")
+     * @var UserServiceInterface
+     */
+    private $userService;
+
+    public function __construct(UserServiceInterface $userService)
+    {
+        $this->userService = $userService;
+    }
+
+    /**
+     * @Route("register", name="user_register", methods={"GET"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function register(Request $request)
     {
-        $user = new User();
-        $form = $this->createForm(TextType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted())
-        {
-            $passwordHash =
-                $this->get('security.password_encoder')
-                ->encodePassword($user, $user->getPassword());
-
-            $roleRepository =
-                $this
-                ->getDoctrine()
-                ->getRepository(Role::class)
-                ->findOneBy(['name' => 'ROLE_USER']);
-
-            $user->addRole($roleRepository);
-
-            $user->setPassword($passwordHash);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            return $this->redirectToRoute('security_login');
-        }
-
-        return $this->render('users/register.html.twig',[
-            'form' => $form->createView()
+        return $this->render('users/register.html.twig', [
+            'form' => $this->createForm(UserType::class)->createView()
         ]);
+    }
+
+    /**
+     * @Route("register", methods={"POST"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function registerProcess(Request $request)
+    {
+
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        $this->userService->save($user);
+
+        return $this->redirectToRoute('security_login');
     }
 
     /**

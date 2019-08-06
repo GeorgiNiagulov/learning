@@ -1,28 +1,44 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% for msg in app.session.flashbag.get('info') %}
+        <div class="alert alert-success">
+            {{ msg }}
+        </div>
+    {% endfor %}
 
     <div class="container body-content">
         <div class="row">
             {% for article in articles %}
                 <div class="col-md-6">
                     <article>
+
                         <header>
                             <h2>{{ article.title }}</h2>
                         </header>
-
+                        <a href="{{ path('post_view', {id: article.id}) }}">
+                            <img src="{{ article.imageURL }}" width="350" height="175" alt="">
+                        </a>
                         <p>
-                            {{ article.summary }}
+{#                            {{ article.summary }}#}
                         </p>
 
                         <small class="author">
                             {{ article.author.fullName }}
                         </small>
 
+                        <small>
+{#                            Виждания: {{ article.viewCount }}#}
+                        </small>
+                        <br/>
+                        <small>
+                            Дата: {{ article.dateAdded|date("F jS \\a\\t g:ia") }}
+                        </small>
+
                         <footer>
                             <div class="pull-right">
-                                <a class="btn btn-default btn-xs"
-                                   href="{{ path('article_view', {id:article.id}) }}">Научете повече &raquo;</a>
+{#                                <a class="btn btn-default btn-xs"#}
+{#                                   href="{{ path('article_view', {id:article.id}) }}">Научете повече &raquo;</a>#}
                             </div>
                         </footer>
                     </article>
