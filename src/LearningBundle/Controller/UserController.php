@@ -56,14 +56,8 @@ class UserController extends Controller
      */
     public function profile()
     {
-        $userRepository = $this
-            ->getDoctrine()
-            ->getRepository(User::class);
-
-        $currentUser = $userRepository->find($this->getUser());
-
         return $this->render("users/profile.html.twig",
-            ['user' => $currentUser]);
+            ['user' => $this->userService->currentUser()]);
     }
 
     /**

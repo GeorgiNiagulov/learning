@@ -5,6 +5,7 @@ namespace LearningBundle\Controller;
 use LearningBundle\Entity\Article;
 use LearningBundle\Entity\User;
 use LearningBundle\Form\ArticleType;
+use LearningBundle\Service\Article\ArticleServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends Controller
 {
+    private $articleService;
+    public function __construct(ArticleServiceInterface $articleService)
+    {
+        $this->articleService = $articleService;
+    }
+
     /**
      * @Route("/create", name="post_create", methods={"GET"})
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
@@ -37,11 +44,7 @@ class ArticleController extends Controller
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
-
-        $article->setAuthor($this->getUser());
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($article);
-        $em->flush();
+        $this->articleService->create($article);
 
         $this->addFlash("create", "Успешно създадено!");
 
@@ -49,59 +52,60 @@ class ArticleController extends Controller
     }
 
     /**
-     * @Route("/edit/{id}", name="post_edit")
+     * @Route("/edit/{id}", name="post_edit", methods={"GET"})
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-     * @param Request $request
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
-        $article = $this
-            ->getDoctrine()
-            ->getRepository(Article::class)
-            ->find($id);
+        $article = $this->articleService->getOne($id);
 
         if (!$this->isAuthorOrAdmin($article)) {
             return $this->redirectToRoute('blog_index');
         }
 
         if (null === $article) {
-            return $this->redirectToRoute('blog_index');
-        }
-
-        $form = $this->createForm(ArticleType::class, $article);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->merge($article);
-            $em->flush();
-
             return $this->redirectToRoute('blog_index');
         }
 
         return $this->render('articles/edit.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $this->createForm(ArticleType::class)
+                ->createView(),
                 'article' => $article
             ]);
     }
 
     /**
-     * @Route("/delete/{id}", name="post_delete")
+     * @Route("/edit/{id}", methods={"POST"})
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editProcess(Request $request, $id)
+    {
+        $article = $this->articleService->getOne($id);
+
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+            $this->articleService->edit($article);
+
+            return $this->redirectToRoute('blog_index');
+
+    }
+
+    /**
+     * @Route("/delete/{id}", name="post_delete", methods={"GET"})
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param int $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function delete(Request $request, int $id)
+    public function delete(int $id)
     {
-        $article =
-            $this
-                ->getDoctrine()
-                ->getRepository(Article::class)
-                ->find($id);
+        $article = $this->articleService->getOne($id);
 
         if (null === $article) {
             return $this->redirectToRoute('blog_index');
@@ -111,22 +115,30 @@ class ArticleController extends Controller
             return $this->redirectToRoute('blog_index');
         }
 
-        $form = $this->createForm(ArticleType::class, $article);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($article);
-            $em->flush();
-
-            return $this->redirectToRoute('blog_index');
-        }
-
         return $this->render('articles/delete.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $this->createForm(ArticleType::class)
+                ->createView(),
                 'article' => $article
             ]);
+    }
+
+    /**
+     * @Route("/delete/{id}", methods={"POST"})
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @param Request $request
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteProcess(Request $request, int $id)
+    {
+        $article = $this->articleService->getOne($id);
+
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->remove('imageURL');
+        $form->handleRequest($request);
+        $this->articleService->delete($article);
+        return $this->redirectToRoute('blog_index');
     }
 
     /**
@@ -136,11 +148,7 @@ class ArticleController extends Controller
      */
     public function view(int $id)
     {
-        $article =
-            $this
-                ->getDoctrine()
-                ->getRepository(Article::class)
-                ->find($id);
+        $article = $this->articleService->getOne($id);
 
         if (null === $article) {
             return $this->redirectToRoute('blog_index');
@@ -176,11 +184,7 @@ class ArticleController extends Controller
      */
     public function getAllPostsByUser()
     {
-        $articles = $this
-            ->getDoctrine()
-            ->getRepository(Article::class)
-            ->findBy([], ['dateAdded'=> 'DESC']);
-
+        $articles = $this->articleService->getAllArticlesByAuthor();
         return $this->render(
             "articles/myPosts.html.twig",
             [

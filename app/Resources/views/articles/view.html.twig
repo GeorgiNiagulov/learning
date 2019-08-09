@@ -8,6 +8,9 @@
                     <header>
                         <h2>{{ article.title }}</h2>
                     </header>
+                    <a href="{{ path('post_view', {id: article.id}) }}">
+                        <img src="{{ article.imageURL }}" width="350" height="175" alt="">
+                    </a>
 
                     <p>
                         {{ article.content }}
