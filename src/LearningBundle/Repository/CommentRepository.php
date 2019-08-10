@@ -2,6 +2,11 @@
 
 namespace LearningBundle\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping;
+use Doctrine\ORM\ORMException;
+use LearningBundle\Entity\Comment;
+
 /**
  * CommentRepository
  *
@@ -10,4 +15,24 @@ namespace LearningBundle\Repository;
  */
 class CommentRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function __construct(EntityManagerInterface $em,
+                                Mapping\ClassMetadata $metaData = null)
+    {
+        parent::__construct($em,
+            $metaData == null ?
+                new Mapping\ClassMetadata(Comment::class):
+                $metaData
+        );
+    }
+
+    public function insert(Comment $comment)
+    {
+        try {
+            $this->_em->persist($comment);
+            $this->_em->flush();
+            return true;
+        } catch (ORMException $e) {
+            return false;
+        }
+    }
 }

@@ -3,9 +3,11 @@
 namespace LearningBundle\Controller;
 
 use LearningBundle\Entity\Article;
+use LearningBundle\Entity\Comment;
 use LearningBundle\Entity\User;
 use LearningBundle\Form\ArticleType;
 use LearningBundle\Service\Article\ArticleServiceInterface;
+use LearningBundle\Service\Comment\CommentServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
@@ -20,10 +22,16 @@ class ArticleController extends Controller
      * @var ArticleServiceInterface
      */
     private $articleService;
+    /**
+     * @var CommentServiceInterface
+     */
+    private $commentService;
 
-    public function __construct(ArticleServiceInterface $articleService)
+    public function __construct(ArticleServiceInterface $articleService,
+                                CommentServiceInterface $commentService)
     {
         $this->articleService = $articleService;
+        $this->commentService = $commentService;
     }
 
     /**
@@ -164,8 +172,13 @@ class ArticleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($article);
         $em->flush();
+        $comments = $this->commentService->getAllByArticleId($id);
+
         return $this->render("articles/view.html.twig",
-            ['article' => $article]);
+            [
+                'article' => $article,
+                'comments' => $comments
+                ]);
 
     }
 

@@ -3,4 +3,5 @@
 {% block main %}
     <h1>Hi, {{ user.email }}</h1>
     <h3>{{ user.fullName }}</h3>
+    <a href="{{ path('user_edit_profile') }}" class="btn btn-success btn-sm">Промени си данните в профила</a>
 {% endblock %}

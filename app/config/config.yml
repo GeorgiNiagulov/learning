@@ -7,6 +7,10 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    posts_directory: '%kernel.project_dir%/web/uploads/images/posts'
+    users_directory: '%kernel.project_dir%/web/uploads/images/users'
+    courses_directory: '%kernel.project_dir%/web/uploads/images/courses'
+    lectors_directory: '%kernel.project_dir%/web/uploads/images/lectors'
 
 framework:
     #esi: ~

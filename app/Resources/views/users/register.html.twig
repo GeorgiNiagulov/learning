@@ -3,6 +3,14 @@
 {% block body_id 'register' %}
 
 {% block main %}
+    {% for msg in app.session.flashbag.get('errors') %}
+    <div class="alert alert-danger">
+        {{ msg }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">x</span>
+        </button>
+    </div>
+    {% endfor %}
     <div class="container body-content span=8 offset=2">
         <div class="well">
             <form class="form-horizontal" action="{{ path('user_register') }}" method="post">
@@ -11,13 +19,13 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_email">Имейл</label>
                         <div class="col-sm-4 ">
-                            <input class="form-control" id="user_email" placeholder="Имейл" name="user[email]" required type="email">
+                            <input class="form-control" id="user_email" placeholder="Имейл" value="{{ user.email|default(null) }}" name="user[email]" required type="email">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_fullName">Имена</label>
                         <div class="col-sm-4 ">
-                            <input type="text" class="form-control" id="user_fullName" placeholder="Имена" name="user[fullName]" required>
+                            <input type="text" class="form-control" id="user_fullName" placeholder="Имена" value="{{ user.fullName|default(null) }}" name="user[fullName]" required>
                         </div>
                     </div>
                     <div class="form-group">

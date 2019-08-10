@@ -75,6 +75,7 @@ class User implements UserInterface
     {
         $this->articles = new ArrayCollection();
         $this->roles = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
 

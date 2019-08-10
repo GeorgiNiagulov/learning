@@ -9,7 +9,7 @@
                         <h2>{{ article.title }}</h2>
                     </header>
                     <a href="{{ path('post_view', {id: article.id}) }}">
-                        <img src="{{ article.imageURL }}" width="350" height="175" alt="">
+                        <img src="{{ asset('uploads/images/posts/' ~article.image) }}" width="350" height="175" alt="">
                     </a>
 
                     <p>
@@ -23,16 +23,50 @@
                     <footer>
                         <div class="pull-right">
                             {% if app.getUser() and (app.getUser().isAuthor(article) or app.getUser().isAdmin()) %}
-                            <a class="btn btn-success btn-xs" href="{{ path('post_edit', {'id' : article.id}) }}">Промени</a>
-                            <a class="btn btn-danger btn-xs" href="{{ path('post_delete', {'id' : article.id}) }}">Изтрий</a>
+                                <a class="btn btn-success btn-xs" href="{{ path('post_edit', {'id' : article.id}) }}">Промени</a>
+                                <a class="btn btn-danger btn-xs" href="{{ path('post_delete', {'id' : article.id}) }}">Изтрий</a>
                             {% endif %}
                             <a class="btn btn-default btn-xs" href="{{ path('blog_index') }}">Върни се &raquo;</a>
                         </div>
                     </footer>
                 </article>
+                <br/>
+                {% if app.getUser() %}
+                <a class="btn btn-dark btn-sm" id="add">
+                    Добави коментар
+                </a>
+                <div id="comment"></div>
+                {% endif %}
+                {% for comment in comments %}
+                    <p>{{ comment.content }}</p>
+                    <small>{{ comment.dateAdded|date("F jS \\a\\t g:ia") }}</small>
+                    <br/>
+                    <small>{{ comment.author.fullName }}</small>
+                    <hr>
+                {% endfor %}
             </div>
         </div>
     </div>
+    <script>
+        $('#add').click(function () {
+            $('#comment').empty();
+            let commentForm =
+                `
+                <form action="{{ path('comment_create', {id: article.id}) }}" method="post" >
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="article_content">Коментар</label>
+                        <div class="col-sm-6">
+                        <textarea class="form-control" rows="6" id="article_content"
+                                  name="comment[content]"></textarea><br/>
+                            <input type="submit" value="Добави" class="btn btn-dark btn-sm"/>
+                        </div>
+                    </div>
+                </form>`;
+            $('#comment').append(commentForm);
+            $('#comment').toggle();
+        })
+    </script>
+
 
 {% endblock %}
 

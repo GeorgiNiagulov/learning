@@ -4,88 +4,165 @@
     <meta charset="UTF-8"/>
     <title>{% block title %}Learnify{% endblock %}</title>
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/styles-merged.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free-5.0.1/css/fontawesome-all.css') }}">
+        <link rel="stylesheet" href="{{ asset('plugins/OwlCarousel2-2.2.1/owl.carousel.css') }}">
+        <link rel="stylesheet" href="{{ asset('plugins/OwlCarousel2-2.2.1/owl.theme.default.css') }}">
+        <link rel="stylesheet" href="{{ asset('plugins/OwlCarousel2-2.2.1/animate.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/main_styles.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
 </head>
 
 <body id="{% block body_id %}{% endblock %}">
 
-<div class="probootstrap-page-wrapper">
+<div class="super_container">
     <!-- Fixed navbar -->
     {% block header %}
-        <nav class="navbar navbar-default probootstrap-navbar">
-            <div class="container">
-                <div class="navbar-header">
-                    <div class="btn-more js-btn-more visible-xs">
-                        <a href="#"><i class="icon-dots-three-vertical "></i></a>
+        <!-- Header -->
+
+        <header class="header d-flex flex-row">
+            <div class="header_content d-flex flex-row align-items-center">
+                <!-- Logo -->
+                <div class="logo_container">
+                    <div class="logo">
+                        <img src="{{ asset('img/logo.png') }}" alt="">
+                        <span>Learnify</span>
                     </div>
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                            data-target="#navbar-collapse" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="{{ path('blog_index') }}" title="uiCookies:Learnify">Learnify</a>
                 </div>
 
-                <div id="navbar-collapse" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="{{ path('blog_index') }}">Начало</a></li>
-                        <li><a href="courses.html">Курсове</a></li>
-                        <li><a href="teachers.html">Лектори</a></li>
-                        <li><a href="events.html">Събития</a></li>
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Страници</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="about.html">За нас</a></li>
-                                <li><a href="course-single.html">Курс</a></li>
-                                <li><a href="gallery.html">Галерия</a></li>
-                                <li><a href="news.html">Новини</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Блог</a></li>
-                        <li><a href="contact.html">Контакт</a></li>
+                <!-- Main Navigation -->
+
+                <nav class="main_nav_container">
+                    <div class="main_nav">
+                        <ul class="main_nav_list">
+                            <li class="main_nav_item"><a href="{{ path('blog_index') }}">Начало</a></li>
+                            <li class="main_nav_item"><a href="courses.html">Лекции</a></li>
+                            <li class="main_nav_item"><a href="elements.html">Лектори</a></li>
+                            <li class="main_nav_item"><a href="news.html">Новини</a></li>
+                            <li class="main_nav_item"><a href="contact.html">Контакти</a></li>
+                            {% if app.user %}
+                                <li class="main_nav_item">
+                                    <a href="{{ path('user_profile') }}">
+                                        Моят профил
+                                    </a>
+                                </li>
+                                <li class="main_nav_item">
+                                    <a href="{{ path('my_posts') }}">
+                                        Моите постове
+                                    </a>
+                                </li>
+                                <li class="main_nav_item">
+                                    <a href="{{ path('post_create') }}">
+                                        Създай пост
+                                    </a>
+                                </li>
+                                <li class="main_nav_item">
+                                    <a href="{{ path('security_logout') }}">
+                                        Излез
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="main_nav_item">
+                                    <a href="{{ path('user_register') }}">
+                                        Регистрирай се
+                                    </a>
+                                </li>
+                                <li class="main_nav_item">
+                                    <a href="{{ path('security_login') }}">
+                                        Влез
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="header_side d-flex flex-row justify-content-center align-items-center">
+                <img src="{{ asset('img/phone-call.svg') }}" alt="">
+                <span>+43 4566 7788 2457</span>
+            </div>
+
+            <!-- Hamburger -->
+            <div class="hamburger_container">
+                <i class="fas fa-bars trans_200"></i>
+            </div>
+
+        </header>
+
+        <!-- Menu -->
+        <div class="menu_container menu_mm">
+
+            <!-- Menu Close Button -->
+            <div class="menu_close_container">
+                <div class="menu_close"></div>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="menu_inner menu_mm">
+                <div class="menu menu_mm">
+                    <ul class="menu_list menu_mm">
+                        <li class="menu_item menu_mm"><a href="{{ path('blog_index') }}">Начало</a></li>
+                        <li class="menu_item menu_mm"><a href="courses.html">Курсове</a></li>
+                        <li class="menu_item menu_mm"><a href="elements.html">Лектори</a></li>
+                        <li class="menu_item menu_mm"><a href="news.html">Новини</a></li>
+                        <li class="menu_item menu_mm"><a href="contact.html">Контакти</a></li>
                         {% if app.user %}
-                            <li>
+                            <li class="menu_item menu_mm">
                                 <a href="{{ path('user_profile') }}">
                                     Моят профил
                                 </a>
                             </li>
-                            <li>
+                            <li class="menu_item menu_mm">
                                 <a href="{{ path('my_posts') }}">
                                     Моите постове
                                 </a>
                             </li>
-                            <li>
+                            <li class="menu_item menu_mm">
                                 <a href="{{ path('post_create') }}">
                                     Създай пост
                                 </a>
                             </li>
-                            <li>
+                            <li class="menu_item menu_mm">
                                 <a href="{{ path('security_logout') }}">
                                     Излез
                                 </a>
                             </li>
                         {% else %}
-                            <li>
+                            <li class="menu_item menu_mm">
                                 <a href="{{ path('user_register') }}">
                                     Регистрирай се
                                 </a>
                             </li>
-                            <li>
+                            <li class="menu_item menu_mm">
                                 <a href="{{ path('security_login') }}">
                                     Влез
                                 </a>
                             </li>
                         {% endif %}
                     </ul>
+
+                    <!-- Menu Social -->
+
+                    <div class="menu_social_container menu_mm">
+                        <ul class="menu_social menu_mm">
+                            <li class="menu_social_item menu_mm"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+                            <li class="menu_social_item menu_mm"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                            <li class="menu_social_item menu_mm"><a href="#"><i class="fab fa-instagram"></i></a></li>
+                            <li class="menu_social_item menu_mm"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                            <li class="menu_social_item menu_mm"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        </ul>
+                    </div>
+
+                    <div class="menu_copyright menu_mm">Colorlib All rights reserved</div>
                 </div>
+
             </div>
-        </nav>
+
+        </div>
+
     {% endblock %}
 
     {% block body %}
@@ -97,77 +174,123 @@
     {% endblock %}
 
     {% block footer %}
-        <footer class="probootstrap-footer probootstrap-bg">
+        <footer class="footer">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="probootstrap-footer-widget">
-                            <h3>За училището</h3>
-                            <p>Създадено през 2019г.
-                                Целта ни е да обучаваме хора
-                                и да им помагаме да тръгнат в сферата на програмирането.</p>
-                            <h3>Социални мрежи</h3>
-                            <ul class="probootstrap-footer-social">
-                                <li><a href="#"><i class="icon-twitter"></i></a></li>
-                                <li><a href="#"><i class="icon-facebook"></i></a></li>
-                                <li><a href="#"><i class="icon-github"></i></a></li>
-                                <li><a href="#"><i class="icon-dribbble"></i></a></li>
-                                <li><a href="#"><i class="icon-linkedin"></i></a></li>
-                                <li><a href="#"><i class="icon-youtube"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-md-push-1">
-                        <div class="probootstrap-footer-widget">
-                            <h3>Линкове</h3>
-                            <ul>
-                                <li><a href="{{ path('blog_index') }}">Начало</a></li>
-                                <li><a href="#">Курсове</a></li>
-                                <li><a href="#">Лектори</a></li>
-                                <li><a href="#">Новини</a></li>
-                                <li><a href="#">Блог</a></li>
-                                <li><a href="#">Контакт</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="probootstrap-footer-widget">
-                            <h3>Свържи се с нас</h3>
-                            <ul class="probootstrap-contact-info">
-                                <li><i class="icon-location2"></i> <span>София, ул. Нова надежда 3</span>
-                                </li>
-                                <li><i class="icon-mail"></i><span>info@learnify.com</span></li>
-                                <li><i class="icon-phone2"></i><span>+359883313354121</span></li>
-                            </ul>
-                        </div>
-                    </div>
+                <!-- Footer Content -->
 
-                </div>
-                <!-- END row -->
-
-            </div>
-
-            <div class="probootstrap-copyright">
-                <div class="container">
+                <div class="footer_content">
                     <div class="row">
-                        <div class="col-md-8 text-left">
-                            <p>&copy; 2017 <a href="https://uicookies.com/">uiCookies:Learnify</a>. All Rights Reserved.
-                                Designed &amp; Developed with <i class="icon icon-heart"></i> by <a
-                                        href="https://uicookies.com/">uicookies.com</a></p>
+
+                        <!-- Footer Column - About -->
+                        <div class="col-lg-3 footer_col">
+
+                            <!-- Logo -->
+                            <div class="logo_container">
+                                <div class="logo">
+                                    <img src="{{ asset('img/logo.png') }}" alt="">
+                                    <span>course</span>
+                                </div>
+                            </div>
+
+                            <p class="footer_about_text">In aliquam, augue a gravida rutrum, ante nisl fermentum nulla, vitae tempor nisl ligula vel nunc. Proin quis mi malesuada, finibus tortor fermentum, tempor lacus.</p>
+
                         </div>
-                        <div class="col-md-4 probootstrap-back-to-top">
-                            <p><a href="#" class="js-backtotop">Back to top <i class="icon-arrow-long-up"></i></a></p>
+
+                        <!-- Footer Column - Menu -->
+
+                        <div class="col-lg-3 footer_col">
+                            <div class="footer_column_title">Menu</div>
+                            <div class="footer_column_content">
+                                <ul>
+                                    <li class="footer_list_item"><a href="#">Home</a></li>
+                                    <li class="footer_list_item"><a href="#">About Us</a></li>
+                                    <li class="footer_list_item"><a href="courses.html">Courses</a></li>
+                                    <li class="footer_list_item"><a href="news.html">News</a></li>
+                                    <li class="footer_list_item"><a href="contact.html">Contact</a></li>
+                                </ul>
+                            </div>
                         </div>
+
+                        <!-- Footer Column - Usefull Links -->
+
+                        <div class="col-lg-3 footer_col">
+                            <div class="footer_column_title">Usefull Links</div>
+                            <div class="footer_column_content">
+                                <ul>
+                                    <li class="footer_list_item"><a href="#">Testimonials</a></li>
+                                    <li class="footer_list_item"><a href="#">FAQ</a></li>
+                                    <li class="footer_list_item"><a href="#">Community</a></li>
+                                    <li class="footer_list_item"><a href="#">Campus Pictures</a></li>
+                                    <li class="footer_list_item"><a href="#">Tuitions</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Footer Column - Contact -->
+
+                        <div class="col-lg-3 footer_col">
+                            <div class="footer_column_title">Contact</div>
+                            <div class="footer_column_content">
+                                <ul>
+                                    <li class="footer_contact_item">
+                                        <div class="footer_contact_icon">
+                                            <img src="{{ asset('img/placeholder.svg') }}" alt="https://www.flaticon.com/authors/lucy-g">
+                                        </div>
+                                        Blvd Libertad, 34 m05200 Arévalo
+                                    </li>
+                                    <li class="footer_contact_item">
+                                        <div class="footer_contact_icon">
+                                            <img src="{{ asset('img/smartphone.svg') }}" alt="https://www.flaticon.com/authors/lucy-g">
+                                        </div>
+                                        0034 37483 2445 322
+                                    </li>
+                                    <li class="footer_contact_item">
+                                        <div class="footer_contact_icon">
+                                            <img src="{{ asset('img/envelope.svg') }}" alt="https://www.flaticon.com/authors/lucy-g">
+                                        </div>hello@company.com
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
+                <!-- Footer Copyright -->
+
+                <div class="footer_bar d-flex flex-column flex-sm-row align-items-center">
+                    <div class="footer_copyright">
+					<span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></span>
+                    </div>
+                    <div class="footer_social ml-sm-auto">
+                        <ul class="menu_social">
+                            <li class="menu_social_item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+                            <li class="menu_social_item"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                            <li class="menu_social_item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+                            <li class="menu_social_item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                            <li class="menu_social_item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </footer>
     {% endblock %}
 </div>
 
 {% block javascripts %}
-    <script src="{{ asset('js/scripts.min.js') }}"></script>
-    <script src="{{ asset('js/main.min.js') }}"></script>
+    <script src="{{ asset('js/popper.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('plugins/greensock/TweenMax.min.js') }}"></script>
+    <script src="{{ asset('plugins/greensock/TimelineMax.min.js') }}"></script>
+    <script src="{{ asset('plugins/scrollmagic/ScrollMagic.min.js') }}"></script>
+    <script src="{{ asset('plugins/greensock/animation.gsap.min.js') }}"></script>
+    <script src="{{ asset('plugins/greensock/ScrollToPlugin.min.js') }}"></script>
+    <script src="{{ asset('plugins/OwlCarousel2-2.2.1/owl.carousel.js') }}"></script>
+    <script src="{{ asset('plugins/scrollTo/jquery.scrollTo.min.js') }}"></script>
+    <script src="{{ asset('plugins/easing/easing.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
 {% endblock %}
 </body>

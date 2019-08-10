@@ -2,7 +2,9 @@
 
 namespace LearningBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use http\Message;
 
 /**
  * Article
@@ -48,6 +50,13 @@ class Article
     private $summary;
 
     /**
+     * @var ArrayCollection|Comment[]
+     *
+     * @ORM\OneToMany(targetEntity="LearningBundle\Entity\Comment", mappedBy="article")
+     */
+    private $comments;
+
+    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="LearningBundle\Entity\User", inversedBy="articles")
@@ -71,6 +80,7 @@ class Article
     public function __construct()
     {
         $this->dateAdded = new \DateTime('now');
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -228,5 +238,24 @@ class Article
     {
         $this->image = $image;
     }
+
+    /**
+     * @return ArrayCollection|Comment[]
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param ArrayCollection $comments
+     * @return Article
+     */
+    public function setComments(ArrayCollection $comments)
+    {
+        $this->comments = $comments;
+        return $this;
+    }
+
 
 }
