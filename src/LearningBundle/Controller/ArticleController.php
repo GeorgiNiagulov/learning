@@ -3,7 +3,6 @@
 namespace LearningBundle\Controller;
 
 use LearningBundle\Entity\Article;
-use LearningBundle\Entity\Comment;
 use LearningBundle\Entity\User;
 use LearningBundle\Form\ArticleType;
 use LearningBundle\Service\Article\ArticleServiceInterface;
@@ -149,7 +148,7 @@ class ArticleController extends Controller
         $article = $this->articleService->getOne($id);
 
         $form = $this->createForm(ArticleType::class, $article);
-        $form->remove('imageURL');
+        $form->remove('image');
         $form->handleRequest($request);
         $this->articleService->delete($article);
         return $this->redirectToRoute('blog_index');
