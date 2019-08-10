@@ -5,6 +5,8 @@ namespace LearningBundle\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use LearningBundle\Entity\Course;
 
 /**
@@ -22,5 +24,56 @@ class CourseRepository extends EntityRepository
                 new Mapping\ClassMetadata(Course::class):
                 $metaData
         );
+    }
+
+    /**
+     * @param Course $course
+     * @return bool
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function insert(Course $course)
+    {
+        try {
+            $this->_em->persist($course);
+            $this->_em->flush();
+            return true;
+        } catch (ORMException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @param Course $course
+     * @return bool
+     * @throws ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function update(Course $course)
+    {
+        try {
+            $this->_em->merge($course);
+            $this->_em->flush();
+            return true;
+        } catch (ORMException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @param Course $course
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function remove(Course $course)
+    {
+        try {
+            $this->_em->remove($course);
+            $this->_em->flush();
+            return true;
+        } catch (ORMException $e) {
+            return false;
+        }
     }
 }

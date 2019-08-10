@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Course
  *
  * @ORM\Table(name="courses")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CourseRepository")
+ * @ORM\Entity(repositoryClass="LearningBundle\Repository\CourseRepository")
  */
 class Course
 {
@@ -42,6 +42,12 @@ class Course
      */
     private $datetime;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255)
+     */
+    private $image;
 
     /**
      * Get id
@@ -124,5 +130,22 @@ class Course
     {
         return $this->datetime;
     }
+
+    /**
+     * @return string
+     */
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $image
+     */
+    public function setImage(string $image): void
+    {
+        $this->image = $image;
+    }
+
 }
 

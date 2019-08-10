@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Lector
  *
  * @ORM\Table(name="lectors")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\LectorRepository")
+ * @ORM\Entity(repositoryClass="LearningBundle\Repository\LectorRepository")
  */
 class Lector
 {
@@ -32,9 +32,9 @@ class Lector
     /**
      * @var string
      *
-     * @ORM\Column(name="imageURL", type="text")
+     * @ORM\Column(name="image", type="string", length=255)
      */
-    private $imageURL;
+    private $image;
 
     /**
      * @var ArrayCollection
@@ -86,27 +86,45 @@ class Lector
     }
 
     /**
-     * Set imageURL
+     * Set image
      *
-     * @param string $imageURL
+     * @param string $image
      *
      * @return Lector
      */
-    public function setImageURL($imageURL)
+    public function setImage($image)
     {
-        $this->imageURL = $imageURL;
+        $this->image = $image;
 
         return $this;
     }
 
     /**
-     * Get imageURL
+     * Get image
      *
      * @return string
      */
-    public function getImageURL()
+    public function getImage()
     {
-        return $this->imageURL;
+        return $this->image;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourses(): ArrayCollection
+    {
+        return $this->courses;
+    }
+
+    /**
+     * @param ArrayCollection $courses
+     * @return Lector
+     */
+    public function setCourses(ArrayCollection $courses)
+    {
+        $this->courses = $courses;
+        return $this;
     }
 }
 

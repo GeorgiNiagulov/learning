@@ -4,7 +4,7 @@ namespace LearningBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use http\Message;
+
 
 /**
  * Article
