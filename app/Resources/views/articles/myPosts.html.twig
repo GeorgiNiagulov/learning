@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <div class="container body-content">
+        <div class="row">
+            {% for article in articles %}
+                <div class="col-md-12">
+                    <article>
+                        <header>
+                            <h2>{{ article.title }}</h2>
+                        </header>
+                        <a href="{{ path('post_view', {id: article.id}) }}">
+                            <img src="{{ asset('uploads/images/posts/' ~article.image) }}" width="350" height="175" alt="">
+                        </a>
+
+                        <p>
+                            {{ article.content }}
+                        </p>
+                        <footer>
+                            <div class="pull-right">
+                                <a class="btn btn-success btn-xs" href="{{ path('post_edit', {'id' : article.id}) }}">Промени</a>
+                                <a class="btn btn-danger btn-xs" href="{{ path('post_delete', {'id' : article.id}) }}">Изтрий</a>
+                                <a class="btn btn-default btn-xs" href="{{ path('blog_index') }}">Върни се &raquo;</a>
+                            </div>
+                        </footer>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+

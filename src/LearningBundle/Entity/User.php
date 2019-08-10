@@ -64,6 +64,13 @@ class User implements UserInterface
      */
     private $roles;
 
+    /**
+     * @var ArrayCollection|Comment[]
+     *
+     * @ORM\OneToMany(targetEntity="LearningBundle\Entity\Comment", mappedBy="author")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -272,6 +279,24 @@ class User implements UserInterface
     public function isAdmin()
     {
         return in_array("ROLE_ADMIN", $this->getRoles());
+    }
+
+    /**
+     * @return ArrayCollection|Comment[]
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param Comment $comments
+     * @return User
+     */
+    public function setComments(Comment $comments)
+    {
+        $this->comments[] = $comments;
+        return $this;
     }
 }
 
